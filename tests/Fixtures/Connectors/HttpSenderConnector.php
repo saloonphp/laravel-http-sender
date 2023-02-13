@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Saloon\HttpSender\Tests\Fixtures\Connectors;
 
-use Saloon\Contracts\Sender;
 use Saloon\Http\Connector;
-use Saloon\HttpSender\Http\Senders\HttpSender;
+use Saloon\Contracts\Sender;
 use Saloon\Traits\Plugins\AcceptsJson;
+use Saloon\HttpSender\Http\Senders\HttpSender;
 
 class HttpSenderConnector extends Connector
 {

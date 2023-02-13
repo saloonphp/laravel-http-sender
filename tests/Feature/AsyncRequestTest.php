@@ -6,14 +6,14 @@ use Saloon\Http\Response;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Exceptions\Request\RequestException;
 use Saloon\HttpSender\Http\Senders\HttpSender;
-use Saloon\HttpSender\Tests\Fixtures\Connectors\HttpSenderConnector;
-use Saloon\HttpSender\Tests\Fixtures\Requests\ErrorRequest;
-use Saloon\HttpSender\Tests\Fixtures\Requests\UserRequest;
-use Saloon\HttpSender\Tests\Fixtures\Requests\UserRequestWithCustomResponse;
+use Saloon\Exceptions\Request\RequestException;
 use Saloon\HttpSender\Tests\Fixtures\Responses\UserData;
+use Saloon\HttpSender\Tests\Fixtures\Requests\UserRequest;
+use Saloon\HttpSender\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\HttpSender\Tests\Fixtures\Responses\UserResponse;
+use Saloon\HttpSender\Tests\Fixtures\Connectors\HttpSenderConnector;
+use Saloon\HttpSender\Tests\Fixtures\Requests\UserRequestWithCustomResponse;
 
 test('an asynchronous request can be made successfully', function () {
     $promise = HttpSenderConnector::make()->sendAsync(new UserRequest);

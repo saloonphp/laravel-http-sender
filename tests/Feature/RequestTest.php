@@ -1,9 +1,9 @@
 ¬<?php
 
 use Saloon\HttpSender\Http\Senders\HttpSender;
-use Saloon\HttpSender\Tests\Fixtures\Connectors\HttpSenderConnector;
-use Saloon\HttpSender\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\HttpSender\Tests\Fixtures\Requests\UserRequest;
+use Saloon\HttpSender\Tests\Fixtures\Requests\ErrorRequest;
+use Saloon\HttpSender\Tests\Fixtures\Connectors\HttpSenderConnector;
 
 test('a request can be made successfully', function () {
     $request = new UserRequest();
