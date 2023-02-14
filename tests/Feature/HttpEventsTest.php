@@ -18,12 +18,14 @@ test('the http events are fired when using the http sender', function () {
     $connector = new HttpSenderConnector;
     $responseA = $connector->send(new UserRequest);
     $responseB = $connector->send(new UserRequest);
+    $responseC = $connector->send(new UserRequest);
 
     expect($responseA->status())->toBe(200);
     expect($responseB->status())->toBe(200);
+    expect($responseC->status())->toBe(200);
 
-    Event::assertDispatched(RequestSending::class, 2);
-    Event::assertDispatched(ResponseReceived::class, 2);
+    Event::assertDispatched(RequestSending::class, 3);
+    Event::assertDispatched(ResponseReceived::class, 3);
 });
 
 test('the http events are fired when using the http sender with asynchronous events', function () {
@@ -34,9 +36,11 @@ test('the http events are fired when using the http sender with asynchronous eve
     $connector = new HttpSenderConnector;
     $responseA = $connector->sendAsync(new UserRequest)->wait();
     $responseB = $connector->sendAsync(new UserRequest)->wait();
+    $responseC = $connector->sendAsync(new UserRequest)->wait();
 
     expect($responseA->status())->toBe(200);
     expect($responseB->status())->toBe(200);
+    expect($responseC->status())->toBe(200);
 
     Event::assertDispatched(RequestSending::class, 2);
     Event::assertDispatched(ResponseReceived::class, 2);
