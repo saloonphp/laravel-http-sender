@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Saloon\HttpSender\Http;
+namespace Saloon\HttpSender;
 
 use Illuminate\Http\Client\Factory;
 use Illuminate\Http\Client\PendingRequest;

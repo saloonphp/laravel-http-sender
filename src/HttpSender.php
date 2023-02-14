@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Saloon\HttpSender\Http\Senders;
+namespace Saloon\HttpSender;
 
-use Throwable;
-use Saloon\Contracts\Response;
-use Illuminate\Http\Client\Factory;
-use Saloon\Contracts\PendingRequest;
-use Saloon\Http\Senders\GuzzleSender;
-use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\TransferException;
-use Saloon\HttpSender\Http\HttpPendingRequest;
+use GuzzleHttp\Promise\PromiseInterface;
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\Factory;
+use Illuminate\Http\Client\RequestException as HttpRequestException;
+use Illuminate\Http\Client\Response as HttpResponse;
+use Saloon\Contracts\PendingRequest;
+use Saloon\Contracts\Response;
+use Saloon\Exceptions\Request\FatalRequestException;
+use Saloon\Http\Senders\GuzzleSender;
 use Saloon\Repositories\Body\FormBodyRepository;
 use Saloon\Repositories\Body\JsonBodyRepository;
-use Saloon\Repositories\Body\StringBodyRepository;
-use Illuminate\Http\Client\Response as HttpResponse;
-use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Repositories\Body\MultipartBodyRepository;
-use Illuminate\Http\Client\RequestException as HttpRequestException;
+use Saloon\Repositories\Body\StringBodyRepository;
+use Throwable;
 
 class HttpSender extends GuzzleSender
 {
@@ -52,7 +52,7 @@ class HttpSender extends GuzzleSender
                 $pendingRequest->getUrl(),
                 $this->createRequestOptions($pendingRequest)
             );
-        } catch (TransferException $exception) {
+        } catch (ConnectionException|TransferException $exception) {
             if ($pendingRequest->isAsynchronous() === false) {
                 // When the exception wasn't a RequestException, we'll throw a fatal
                 // exception as this is likely a ConnectException, but it will

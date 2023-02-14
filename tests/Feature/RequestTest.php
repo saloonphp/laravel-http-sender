@@ -1,9 +1,11 @@
 ¬<?php
 
-use Saloon\HttpSender\Http\Senders\HttpSender;
-use Saloon\HttpSender\Tests\Fixtures\Requests\UserRequest;
-use Saloon\HttpSender\Tests\Fixtures\Requests\ErrorRequest;
+use Saloon\Exceptions\Request\FatalRequestException;
+use Saloon\HttpSender\HttpSender;
 use Saloon\HttpSender\Tests\Fixtures\Connectors\HttpSenderConnector;
+use Saloon\HttpSender\Tests\Fixtures\Connectors\InvalidConnectionConnector;
+use Saloon\HttpSender\Tests\Fixtures\Requests\ErrorRequest;
+use Saloon\HttpSender\Tests\Fixtures\Requests\UserRequest;
 
 test('a request can be made successfully', function () {
     $request = new UserRequest();
@@ -29,4 +31,14 @@ test('a request can handle an exception properly', function () {
 
     expect($response->isMocked())->toBeFalse();
     expect($response->status())->toEqual(500);
+});
+
+test('a request will throw an exception if a connection error happens', function () {
+    $request = new UserRequest;
+    $connector = new InvalidConnectionConnector;
+
+    $this->expectException(FatalRequestException::class);
+    $this->expectExceptionMessage('Could not resolve host: invalid.saloon.dev');
+
+    $connector->send($request);
 });
