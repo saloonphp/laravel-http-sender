@@ -1,14 +1,16 @@
 <?php
 
-use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Promise\PromiseInterface;
+declare(strict_types=1);
+
 use Saloon\Contracts\Response;
-use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Http\PendingRequest;
 use Saloon\HttpSender\HttpSender;
+use GuzzleHttp\Promise\PromiseInterface;
+use GuzzleHttp\Exception\ConnectException;
+use Saloon\Exceptions\Request\FatalRequestException;
+use Saloon\HttpSender\Tests\Fixtures\Requests\UserRequest;
 use Saloon\HttpSender\Tests\Fixtures\Connectors\HttpSenderConnector;
 use Saloon\HttpSender\Tests\Fixtures\Connectors\InvalidConnectionConnector;
-use Saloon\HttpSender\Tests\Fixtures\Requests\UserRequest;
 
 test('you can create a pool on a connector', function () {
     $connector = new HttpSenderConnector;

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
+use Saloon\HttpSender\HttpSender;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Client\Events\RequestSending;
 use Illuminate\Http\Client\Events\ResponseReceived;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Event;
-use Saloon\HttpSender\HttpSender;
-use Saloon\HttpSender\Tests\Fixtures\Connectors\HttpSenderConnector;
 use Saloon\HttpSender\Tests\Fixtures\Requests\UserRequest;
+use Saloon\HttpSender\Tests\Fixtures\Connectors\HttpSenderConnector;
 
 test('the http events are fired when using the http sender', function () {
     Config::set('saloon.default_sender', HttpSender::class);

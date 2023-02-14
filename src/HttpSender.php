@@ -4,22 +4,22 @@ declare(strict_types=1);
 
 namespace Saloon\HttpSender;
 
+use Throwable;
+use Saloon\Contracts\Response;
+use Illuminate\Http\Client\Factory;
+use Saloon\Contracts\PendingRequest;
+use Saloon\Http\Senders\GuzzleSender;
+use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\TransferException;
-use GuzzleHttp\Promise\PromiseInterface;
 use Illuminate\Http\Client\ConnectionException;
-use Illuminate\Http\Client\Factory;
-use Illuminate\Http\Client\RequestException as HttpRequestException;
-use Illuminate\Http\Client\Response as HttpResponse;
-use Saloon\Contracts\PendingRequest;
-use Saloon\Contracts\Response;
-use Saloon\Exceptions\Request\FatalRequestException;
-use Saloon\Http\Senders\GuzzleSender;
 use Saloon\Repositories\Body\FormBodyRepository;
 use Saloon\Repositories\Body\JsonBodyRepository;
-use Saloon\Repositories\Body\MultipartBodyRepository;
 use Saloon\Repositories\Body\StringBodyRepository;
-use Throwable;
+use Illuminate\Http\Client\Response as HttpResponse;
+use Saloon\Exceptions\Request\FatalRequestException;
+use Saloon\Repositories\Body\MultipartBodyRepository;
+use Illuminate\Http\Client\RequestException as HttpRequestException;
 
 class HttpSender extends GuzzleSender
 {

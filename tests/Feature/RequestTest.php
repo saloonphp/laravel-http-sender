@@ -1,11 +1,11 @@
 ¬<?php
 
-use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\HttpSender\HttpSender;
+use Saloon\Exceptions\Request\FatalRequestException;
+use Saloon\HttpSender\Tests\Fixtures\Requests\UserRequest;
+use Saloon\HttpSender\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\HttpSender\Tests\Fixtures\Connectors\HttpSenderConnector;
 use Saloon\HttpSender\Tests\Fixtures\Connectors\InvalidConnectionConnector;
-use Saloon\HttpSender\Tests\Fixtures\Requests\ErrorRequest;
-use Saloon\HttpSender\Tests\Fixtures\Requests\UserRequest;
 
 test('a request can be made successfully', function () {
     $request = new UserRequest();
