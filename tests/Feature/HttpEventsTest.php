@@ -42,6 +42,6 @@ test('the http events are fired when using the http sender with asynchronous eve
     expect($responseB->status())->toBe(200);
     expect($responseC->status())->toBe(200);
 
-    Event::assertDispatched(RequestSending::class, 2);
-    Event::assertDispatched(ResponseReceived::class, 2);
+    Event::assertDispatched(RequestSending::class, 3);
+    Event::assertDispatched(ResponseReceived::class, 3);
 });
