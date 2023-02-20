@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Saloon\HttpSender\Http\Senders;
+namespace Saloon\HttpSender;
 
 use Throwable;
 use Saloon\Contracts\Response;
@@ -12,7 +12,7 @@ use Saloon\Http\Senders\GuzzleSender;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\TransferException;
-use Saloon\HttpSender\Http\HttpPendingRequest;
+use Illuminate\Http\Client\ConnectionException;
 use Saloon\Repositories\Body\FormBodyRepository;
 use Saloon\Repositories\Body\JsonBodyRepository;
 use Saloon\Repositories\Body\StringBodyRepository;
@@ -52,7 +52,7 @@ class HttpSender extends GuzzleSender
                 $pendingRequest->getUrl(),
                 $this->createRequestOptions($pendingRequest)
             );
-        } catch (TransferException $exception) {
+        } catch (ConnectionException|TransferException $exception) {
             if ($pendingRequest->isAsynchronous() === false) {
                 // When the exception wasn't a RequestException, we'll throw a fatal
                 // exception as this is likely a ConnectException, but it will

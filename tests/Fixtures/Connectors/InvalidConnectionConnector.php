@@ -9,7 +9,7 @@ use Saloon\Contracts\Sender;
 use Saloon\HttpSender\HttpSender;
 use Saloon\Traits\Plugins\AcceptsJson;
 
-class HttpSenderConnector extends Connector
+class InvalidConnectionConnector extends Connector
 {
     use AcceptsJson;
 
@@ -20,7 +20,7 @@ class HttpSenderConnector extends Connector
      */
     public function resolveBaseUrl(): string
     {
-        return 'https://tests.saloon.dev/api';
+        return 'https://invalid.saloon.dev/api';
     }
 
     /**
