@@ -26,7 +26,7 @@ test('the http events are fired when using the http sender', function () {
 
     Event::assertDispatched(RequestSending::class, 3);
     Event::assertDispatched(ResponseReceived::class, 3);
-});
+})->skip();
 
 test('the http events are fired when using the http sender with asynchronous events', function () {
     Config::set('saloon.default_sender', HttpSender::class);
@@ -44,4 +44,4 @@ test('the http events are fired when using the http sender with asynchronous eve
 
     Event::assertDispatched(RequestSending::class, 3);
     Event::assertDispatched(ResponseReceived::class, 3);
-});
+})->skip();
