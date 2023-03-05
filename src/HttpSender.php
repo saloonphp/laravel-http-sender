@@ -11,7 +11,6 @@ use Illuminate\Http\Client\Factory;
 use Saloon\Contracts\PendingRequest;
 use Saloon\Http\Senders\GuzzleSender;
 use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\TransferException;
 use Illuminate\Http\Client\ConnectionException;
 use Saloon\Repositories\Body\FormBodyRepository;
@@ -73,19 +72,7 @@ class HttpSender extends GuzzleSender
                 $this->createRequestOptions($pendingRequest)
             );
         } catch (ConnectionException|TransferException $exception) {
-            if ($pendingRequest->isAsynchronous() === false) {
-                // When the exception wasn't a RequestException, we'll throw a fatal
-                // exception as this is likely a ConnectException, but it will
-                // catch any new ones Guzzle release.
-
-                if (! $exception instanceof RequestException) {
-                    throw new FatalRequestException($exception, $pendingRequest);
-                }
-
-                // Otherwise, we'll create a response.
-
-                return $this->createResponse($pendingRequest, $exception->getResponse(), $exception);
-            }
+            throw new FatalRequestException($exception, $pendingRequest);
         }
 
         // When the response is a normal HTTP Client Response, we can create the response
