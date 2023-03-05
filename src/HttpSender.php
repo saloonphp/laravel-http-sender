@@ -24,13 +24,6 @@ use Illuminate\Http\Client\RequestException as HttpRequestException;
 class HttpSender extends GuzzleSender
 {
     /**
-     * Denotes if we have registered the Laravel's default handlers onto the client.
-     *
-     * @var bool
-     */
-    protected bool $hasRegisteredDefaultHandlers = false;
-
-    /**
      * Guzzle middleware used to handle Laravel's Pending Request.
      *
      * @var \Saloon\HttpSender\LaravelMiddleware
