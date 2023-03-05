@@ -24,11 +24,25 @@ use Illuminate\Http\Client\RequestException as HttpRequestException;
 class HttpSender extends GuzzleSender
 {
     /**
-     * Denotes if we have registered the Laravel's default handlers onto the client.
+     * Guzzle middleware used to handle Laravel's Pending Request.
      *
-     * @var bool
+     * @var \Saloon\HttpSender\LaravelMiddleware
      */
-    protected bool $hasRegisteredDefaultHandlers = false;
+    protected LaravelMiddleware $laravelMiddleware;
+
+    /**
+     * Constructor
+     *
+     * Create the HTTP client.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->handlerStack->push(
+            $this->laravelMiddleware = new LaravelMiddleware
+        );
+    }
 
     /**
      * Send the request
@@ -139,7 +153,7 @@ class HttpSender extends GuzzleSender
         $httpPendingRequest = new HttpPendingRequest(resolve(Factory::class));
         $httpPendingRequest->setClient($this->client);
 
-        $this->registerDefaultHandlers($httpPendingRequest);
+        $this->laravelMiddleware->setRequest($httpPendingRequest);
 
         if ($asynchronous === true) {
             $httpPendingRequest->async();
@@ -164,22 +178,5 @@ class HttpSender extends GuzzleSender
         };
 
         return $httpPendingRequest;
-    }
-
-    /**
-     * Register Laravel's handlers onto the Guzzle Handler Stack.
-     *
-     * @param HttpPendingRequest $httpPendingRequest
-     * @return void
-     */
-    protected function registerDefaultHandlers(HttpPendingRequest $httpPendingRequest): void
-    {
-        if ($this->hasRegisteredDefaultHandlers === true) {
-            return;
-        }
-
-        $httpPendingRequest->pushHandlers($this->getHandlerStack());
-
-        $this->hasRegisteredDefaultHandlers = true;
     }
 }
