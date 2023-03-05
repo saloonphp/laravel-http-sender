@@ -31,7 +31,7 @@ class HttpSender extends GuzzleSender
     protected LaravelMiddleware $laravelMiddleware;
 
     /**
-     * Constructorπ
+     * Constructor
      *
      * Create the HTTP client.
      */

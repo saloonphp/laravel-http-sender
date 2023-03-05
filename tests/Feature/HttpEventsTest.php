@@ -16,6 +16,7 @@ test('the http events are fired when using the http sender', function () {
     Event::fake();
 
     $connector = new HttpSenderConnector;
+
     $responseA = $connector->send(new UserRequest);
     $responseB = $connector->send(new UserRequest);
     $responseC = $connector->send(new UserRequest);
@@ -34,6 +35,7 @@ test('the http events are fired when using the http sender with asynchronous eve
     Event::fake();
 
     $connector = new HttpSenderConnector;
+
     $responseA = $connector->sendAsync(new UserRequest)->wait();
     $responseB = $connector->sendAsync(new UserRequest)->wait();
     $responseC = $connector->sendAsync(new UserRequest)->wait();
