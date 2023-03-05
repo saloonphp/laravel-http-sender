@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Client\Events\RequestSending;
 use Illuminate\Http\Client\Events\ResponseReceived;
 use Saloon\HttpSender\Tests\Fixtures\Requests\UserRequest;
+use Saloon\HttpSender\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\HttpSender\Tests\Fixtures\Connectors\HttpSenderConnector;
 
 test('the http events are fired when using the http sender', function () {
@@ -22,11 +23,11 @@ test('the http events are fired when using the http sender', function () {
 
     $responseA = $connector->send(new UserRequest);
     $responseB = $connector->send(new UserRequest);
-    $responseC = $connector->send(new UserRequest);
+    $responseC = $connector->send(new ErrorRequest);
 
     expect($responseA->status())->toBe(200);
     expect($responseB->status())->toBe(200);
-    expect($responseC->status())->toBe(200);
+    expect($responseC->status())->toBe(500);
 
     Event::assertDispatched(RequestSending::class, 3);
     Event::assertDispatched(ResponseReceived::class, 3);

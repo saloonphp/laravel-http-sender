@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Saloon\HttpSender;
 
 use Throwable;
+use GuzzleHttp\RequestOptions;
 use Saloon\Contracts\Response;
 use Illuminate\Http\Client\Factory;
 use Saloon\Contracts\PendingRequest;
@@ -56,6 +57,11 @@ class HttpSender extends GuzzleSender
     {
         try {
             $laravelPendingRequest = $this->createLaravelPendingRequest($pendingRequest, $asynchronous);
+
+            // We need to let Laravel catch and handle HTTP errors to preserve
+            // the default behavior. It does so by inspecting the status code
+            // instead of catching an exception which is what Saloon does.
+            $pendingRequest->config()->set([RequestOptions::HTTP_ERRORS => false]);
 
             // We should pass in the request options as there is a call inside
             // the send method that parses the HTTP options and the Laravel
