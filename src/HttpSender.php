@@ -66,6 +66,7 @@ class HttpSender extends GuzzleSender
             // the send method that parses the HTTP options and the Laravel
             // data properly.
 
+            /** @var \Illuminate\Http\Client\Response|\GuzzleHttp\Promise\PromiseInterface */
             $response = $laravelPendingRequest->send(
                 $pendingRequest->getMethod()->value,
                 $pendingRequest->getUrl(),
