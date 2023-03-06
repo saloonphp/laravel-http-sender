@@ -11,6 +11,7 @@ use Illuminate\Http\Client\Factory;
 use Saloon\Contracts\PendingRequest;
 use Saloon\Http\Senders\GuzzleSender;
 use GuzzleHttp\Promise\PromiseInterface;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\TransferException;
 use Illuminate\Http\Client\ConnectionException;
 use Saloon\Repositories\Body\FormBodyRepository;
@@ -60,6 +61,7 @@ class HttpSender extends GuzzleSender
             // We need to let Laravel catch and handle HTTP errors to preserve
             // the default behavior. It does so by inspecting the status code
             // instead of catching an exception which is what Saloon does.
+
             $pendingRequest->config()->set([RequestOptions::HTTP_ERRORS => false]);
 
             // We should pass in the request options as there is a call inside
@@ -72,7 +74,7 @@ class HttpSender extends GuzzleSender
                 $pendingRequest->getUrl(),
                 $this->createRequestOptions($pendingRequest)
             );
-        } catch (ConnectionException|TransferException $exception) {
+        } catch (ConnectionException|ConnectException $exception) {
             throw new FatalRequestException($exception, $pendingRequest);
         }
 
