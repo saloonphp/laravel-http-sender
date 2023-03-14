@@ -62,7 +62,7 @@ class HttpSender extends GuzzleSender
             // the default behavior. It does so by inspecting the status code
             // instead of catching an exception which is what Saloon does.
 
-            $pendingRequest->config()->set([RequestOptions::HTTP_ERRORS => false]);
+            $pendingRequest->config()->merge([RequestOptions::HTTP_ERRORS => false]);
 
             // We should pass in the request options as there is a call inside
             // the send method that parses the HTTP options and the Laravel
