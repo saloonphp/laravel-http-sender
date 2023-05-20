@@ -1,5 +1,5 @@
 {
-    "name": "sammyjo20/saloon-http-sender",
+    "name": "saloonhttp/laravel-http-sender",
     "description": "Laravel HTTP Client Sender for Saloon v2",
     "license": "MIT",
     "type": "library",
