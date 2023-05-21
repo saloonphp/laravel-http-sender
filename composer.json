@@ -1,6 +1,6 @@
 {
     "name": "saloonphp/laravel-http-sender",
-    "description": "Laravel HTTP Client Sender for Saloon v2",
+    "description": "Laravel HTTP Client Sender for Saloon v2+",
     "license": "MIT",
     "type": "library",
     "authors": [

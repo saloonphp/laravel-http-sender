@@ -5,7 +5,7 @@
 This is the Laravel HTTP client sender for Saloon, to install it run the following command
 
 ```php
-composer require saloonhttp/laravel-http-sender
+composer require saloonphp/laravel-http-sender
 ```
 > Requires Laravel 9+ and PHP 8.1+
 
