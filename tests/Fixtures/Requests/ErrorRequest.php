@@ -11,15 +11,11 @@ class ErrorRequest extends Request
 {
     /**
      * HTTP Method
-     *
-     * @var \Saloon\Enums\Method
      */
     protected Method $method = Method::GET;
 
     /**
      * Resolve the endpoint
-     *
-     * @return string
      */
     public function resolveEndpoint(): string
     {

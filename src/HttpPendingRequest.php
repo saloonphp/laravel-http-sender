@@ -7,12 +7,13 @@ namespace Saloon\HttpSender;
 use Illuminate\Http\Client\Factory;
 use Illuminate\Http\Client\PendingRequest;
 
+/**
+ * @property \Psr\Http\Message\StreamInterface|string $pendingBody
+ */
 class HttpPendingRequest extends PendingRequest
 {
     /**
      * Constructor
-     *
-     * @param \Illuminate\Http\Client\Factory|null $factory
      */
     public function __construct(Factory $factory = null)
     {
@@ -24,10 +25,10 @@ class HttpPendingRequest extends PendingRequest
     /**
      * Set the pending body on the HTTP request.
      *
-     * @param string $pendingBody
+     * @param \Psr\Http\Message\StreamInterface|string $pendingBody
      * @return $this
      */
-    public function setPendingBody(string $pendingBody): static
+    public function setPendingBody(mixed $pendingBody): static
     {
         $this->pendingBody = $pendingBody;
 

@@ -13,15 +13,15 @@
     "homepage": "https://github.com/sammyjo20",
     "require": {
         "php": "^8.1",
-        "saloonphp/saloon": "^2.0",
-        "illuminate/http": "^9.0 || ^10.0"
+        "saloonphp/saloon": "^v3.0.0-beta.4",
+        "illuminate/http": "^9.52 || ^10.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.5",
-        "pestphp/pest": "^1.21",
+        "pestphp/pest": "^1.23",
         "phpstan/phpstan": "^1.9",
         "spatie/ray": "^1.33",
-        "orchestra/testbench": "^7.7 || ^8.0"
+        "orchestra/testbench": "^7.30 || ^8.0"
     },
     "minimum-stability": "stable",
     "autoload": {

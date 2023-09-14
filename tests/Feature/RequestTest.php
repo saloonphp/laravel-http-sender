@@ -11,7 +11,7 @@ test('a request can be made successfully', function () {
     $request = new UserRequest();
     $response = HttpSenderConnector::make()->send($request);
 
-    expect($response->getPendingRequest()->getSender())->toBeInstanceOf(HttpSender::class);
+    expect($response->getConnector()->sender())->toBeInstanceOf(HttpSender::class);
 
     $data = $response->json();
 

@@ -12,7 +12,7 @@ use Saloon\HttpSender\Tests\Fixtures\Connectors\HttpSenderConnector;
 test('the default body is loaded', function () {
     $request = new HasXmlBodyRequest();
 
-    expect($request->body()->all())->toEqual('<p>Howdy</p>');
+    expect($request->body()->get())->toEqual('<p>Howdy</p>');
 });
 
 test('the content-type header is set in the pending request', function () {
@@ -23,7 +23,7 @@ test('the content-type header is set in the pending request', function () {
     expect($pendingRequest->headers()->all())->toHaveKey('Content-Type', 'application/xml');
 });
 
-test('the guzzle sender properly sends it', function () {
+test('the http sender properly sends it', function () {
     $connector = new HttpSenderConnector;
     $request = new HasXmlBodyRequest;
 
@@ -31,12 +31,14 @@ test('the guzzle sender properly sends it', function () {
         expect($pendingRequest->headers()->get('Content-Type'))->toEqual('application/xml');
     });
 
-    $connector->sender()->addMiddleware(function (callable $handler) use ($request) {
-        return function (RequestInterface $guzzleRequest, array $options) use ($request) {
-            expect($guzzleRequest->getHeader('Content-Type'))->toEqual(['application/xml']);
-            expect((string)$guzzleRequest->getBody())->toEqual((string)$request->body());
+    $connector->sender()->addMiddleware(function (callable $handler) use ($connector, $request) {
+        return function (RequestInterface $psrRequest, array $options) use ($connector, $request) {
+            expect($psrRequest->getHeader('Content-Type'))->toEqual(['application/xml']);
+            expect((string)$psrRequest->getBody())->toEqual((string)$request->body());
 
-            return new FulfilledPromise(MockResponse::make()->getPsrResponse());
+            $factoryCollection = $connector->sender()->getFactoryCollection();
+
+            return new FulfilledPromise(MockResponse::make()->createPsrResponse($factoryCollection->responseFactory, $factoryCollection->streamFactory));
         };
     });
 

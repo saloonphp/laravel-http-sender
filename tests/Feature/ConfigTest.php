@@ -11,13 +11,15 @@ use Saloon\HttpSender\Tests\Fixtures\Connectors\HttpSenderConnector;
 test('default guzzle config options are sent', function () {
     $connector = new HttpSenderConnector();
 
-    $connector->sender()->addMiddleware(function (callable $handler) {
-        return function (RequestInterface $guzzleRequest, array $options) {
+    $connector->sender()->addMiddleware(function (callable $handler) use ($connector) {
+        return function (RequestInterface $guzzleRequest, array $options) use ($connector) {
             expect($options)->toHaveKey('http_errors', false);
             expect($options)->toHaveKey('connect_timeout', 10);
             expect($options)->toHaveKey('timeout', 30);
 
-            return new FulfilledPromise(MockResponse::make()->getPsrResponse());
+            $factoryCollection = $connector->sender()->getFactoryCollection();
+
+            return new FulfilledPromise(MockResponse::make()->createPsrResponse($factoryCollection->responseFactory, $factoryCollection->streamFactory));
         };
     });
 
@@ -29,15 +31,17 @@ test('you can pass additional guzzle config options and they are merged from the
 
     $connector->config()->add('debug', true);
 
-    $connector->sender()->addMiddleware(function (callable $handler) {
-        return function (RequestInterface $guzzleRequest, array $options) {
+    $connector->sender()->addMiddleware(function (callable $handler) use ($connector) {
+        return function (RequestInterface $guzzleRequest, array $options) use ($connector) {
             expect($options)->toHaveKey('http_errors', false);
             expect($options)->toHaveKey('connect_timeout', 10);
             expect($options)->toHaveKey('timeout', 30);
             expect($options)->toHaveKey('debug', true);
             expect($options)->toHaveKey('verify', false);
 
-            return new FulfilledPromise(MockResponse::make()->getPsrResponse());
+            $factoryCollection = $connector->sender()->getFactoryCollection();
+
+            return new FulfilledPromise(MockResponse::make()->createPsrResponse($factoryCollection->responseFactory, $factoryCollection->streamFactory));
         };
     });
 
@@ -46,20 +50,4 @@ test('you can pass additional guzzle config options and they are merged from the
     $request->config()->add('verify', false);
 
     $connector->send($request);
-});
-
-test('the withBasicAuth method can be used to add the auth to the guzzle config', function () {
-    $connector = new HttpSenderConnector();
-
-    $connector->withBasicAuth('Sammyjo20', 'Yeehaw');
-
-    $connector->sender()->addMiddleware(function (callable $handler) {
-        return function (RequestInterface $guzzleRequest, array $options) {
-            expect($options)->toHaveKey('auth', ['Sammyjo20', 'Yeehaw']);
-
-            return new FulfilledPromise(MockResponse::make()->getPsrResponse());
-        };
-    });
-
-    $connector->send(new UserRequest);
 });

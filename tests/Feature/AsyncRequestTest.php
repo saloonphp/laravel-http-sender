@@ -23,7 +23,7 @@ test('an asynchronous request can be made successfully', function () {
     $response = $promise->wait();
 
     expect($response)->toBeInstanceOf(Response::class);
-    expect($response->getPendingRequest()->getSender())->toBeInstanceOf(HttpSender::class);
+    expect($response->getConnector()->sender())->toBeInstanceOf(HttpSender::class);
 
     $data = $response->json();
 

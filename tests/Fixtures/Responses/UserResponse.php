@@ -9,7 +9,6 @@ use Saloon\Http\Response;
 class UserResponse extends Response
 {
     /**
-     * @return \Saloon\HttpSender\Tests\Fixtures\Responses\UserData
      * @throws \JsonException
      */
     public function customCastMethod(): UserData
@@ -18,7 +17,6 @@ class UserResponse extends Response
     }
 
     /**
-     * @return string|null
      * @throws \JsonException
      */
     public function foo(): ?string

@@ -13,16 +13,11 @@ class LaravelMiddleware
 {
     /**
      * The current pending request.
-     *
-     * @var \Illuminate\Http\Client\PendingRequest
      */
     protected PendingRequest $pendingRequest;
 
     /**
      * Invoke the middleware.
-     *
-     * @param callable $handler
-     * @return callable
      */
     public function __invoke(callable $handler): callable
     {
@@ -33,9 +28,6 @@ class LaravelMiddleware
 
     /**
      * Set the current pending request.
-     *
-     * @param \Illuminate\Http\Client\PendingRequest $pendingRequest
-     * @return void
      */
     public function setRequest(PendingRequest $pendingRequest): void
     {
