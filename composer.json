@@ -18,10 +18,10 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.5",
-        "pestphp/pest": "^v2.18",
+        "pestphp/pest": "^v2.0",
         "phpstan/phpstan": "^1.9",
         "spatie/ray": "^1.33",
-        "orchestra/testbench": "^7.30. || ^8.0"
+        "orchestra/testbench": "^7.7 || ^8.0"
     },
     "minimum-stability": "stable",
     "autoload": {
