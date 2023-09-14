@@ -15,8 +15,6 @@ class InvalidConnectionConnector extends Connector
 
     /**
      * Resolve the Base URL
-     *
-     * @return string
      */
     public function resolveBaseUrl(): string
     {
@@ -25,8 +23,6 @@ class InvalidConnectionConnector extends Connector
 
     /**
      * Define the default sender
-     *
-     * @return \Saloon\Contracts\Sender
      */
     protected function defaultSender(): Sender
     {

@@ -12,12 +12,12 @@ use Saloon\HttpSender\Tests\Fixtures\Requests\HasMultipartBodyRequest;
 test('the default body is loaded', function () {
     $request = new HasMultipartBodyRequest();
 
-    expect($request->body()->all())->toEqual([
+    expect($request->body()->get())->toEqual([
         'nickname' => new MultipartValue('nickname', 'Sam', 'user.txt', ['X-Saloon' => 'Yee-haw!']),
     ]);
 });
 
-test('the guzzle sender properly sends it', function () {
+test('the http sender properly sends it', function () {
     $connector = new HttpSenderConnector;
     $request = new HasMultipartBodyRequest;
 

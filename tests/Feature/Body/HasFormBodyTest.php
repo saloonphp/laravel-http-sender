@@ -12,13 +12,13 @@ use Saloon\HttpSender\Tests\Fixtures\Connectors\HttpSenderConnector;
 test('the default body is loaded', function () {
     $request = new HasFormBodyRequest();
 
-    expect($request->body()->all())->toEqual([
+    expect($request->body()->get())->toEqual([
         'name' => 'Sam',
         'catchphrase' => 'Yeehaw!',
     ]);
 });
 
-test('the guzzle sender properly sends it', function () {
+test('the http sender properly sends it', function () {
     $connector = new HttpSenderConnector;
     $request = new HasFormBodyRequest;
 

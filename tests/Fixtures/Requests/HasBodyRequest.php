@@ -6,24 +6,20 @@ namespace Saloon\HttpSender\Tests\Fixtures\Requests;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
-use Saloon\Traits\Body\HasBody;
 use Saloon\Contracts\Body\HasBody as HasBodyContract;
+use Saloon\Traits\Body\HasStringBody;
 
 class HasBodyRequest extends Request implements HasBodyContract
 {
-    use HasBody;
+    use HasStringBody;
 
     /**
      * Define the method that the request will use.
-     *
-     * @var Method
      */
     protected Method $method = Method::GET;
 
     /**
      * Define the endpoint for the request.
-     *
-     * @return string
      */
     public function resolveEndpoint(): string
     {
