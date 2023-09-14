@@ -1,22 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Saloon\HttpSender;
 
+use Throwable;
+use Saloon\Http\Response;
+use GuzzleHttp\RequestOptions;
+use Saloon\Http\PendingRequest;
+use Illuminate\Http\Client\Factory;
+use Saloon\Repositories\ArrayStore;
+use Saloon\Http\Senders\GuzzleSender;
+use Psr\Http\Message\RequestInterface;
+use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\TransferException;
-use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\RequestOptions;
 use Illuminate\Http\Client\ConnectionException;
-use Illuminate\Http\Client\Factory;
-use Illuminate\Http\Client\RequestException as HttpRequestException;
 use Illuminate\Http\Client\Response as HttpResponse;
-use Psr\Http\Message\RequestInterface;
 use Saloon\Exceptions\Request\FatalRequestException;
-use Saloon\Http\PendingRequest;
-use Saloon\Http\Response;
-use Saloon\Http\Senders\GuzzleSender;
-use Saloon\Repositories\ArrayStore;
-use Throwable;
+use Illuminate\Http\Client\RequestException as HttpRequestException;
 
 class HttpSender extends GuzzleSender
 {
@@ -49,21 +51,10 @@ class HttpSender extends GuzzleSender
         try {
             $laravelPendingRequest = $this->createLaravelPendingRequest($psrRequest, false);
 
-            // We need to let Laravel catch and handle HTTP errors to preserve
-            // the default behavior. It does so by inspecting the status code
-            // instead of catching an exception which is what Saloon does.
-
-            $config = new ArrayStore($pendingRequest->config()->all());
-            $config->add(RequestOptions::HTTP_ERRORS, false);
-
-            // We should pass in the request options as there is a call inside
-            // the send method that parses the HTTP options and the Laravel
-            // data properly.
-
             $response = $laravelPendingRequest->send(
                 $pendingRequest->getMethod()->value,
                 (string)$psrRequest->getUri(),
-                $config->all(),
+                $this->createRequestOptions($pendingRequest, $psrRequest),
             );
         } catch (ConnectionException|ConnectException $exception) {
             throw new FatalRequestException($exception, $pendingRequest);
@@ -83,19 +74,13 @@ class HttpSender extends GuzzleSender
 
         $laravelPendingRequest = $this->createLaravelPendingRequest($psrRequest, true);
 
-        // We need to let Laravel catch and handle HTTP errors to preserve
-        // the default behavior. It does so by inspecting the status code
-        // instead of catching an exception which is what Saloon does.
-
-        $config = new ArrayStore($pendingRequest->config()->all());
-        $config->add(RequestOptions::HTTP_ERRORS, false);
-
         // Create the promise.
 
+        /** @var PromiseInterface $promise */
         $promise = $laravelPendingRequest->send(
             $pendingRequest->getMethod()->value,
             (string)$psrRequest->getUri(),
-            $config->all(),
+            $this->createRequestOptions($pendingRequest, $psrRequest),
         );
 
         // Send the request
@@ -152,6 +137,30 @@ class HttpSender extends GuzzleSender
     }
 
     /**
+     * Create the request options
+     *
+     * @return array<string, mixed>
+     */
+    protected function createRequestOptions(PendingRequest $pendingRequest, RequestInterface $psrRequest): array
+    {
+        $config = new ArrayStore($pendingRequest->config()->all());
+
+        // We need to let Laravel catch and handle HTTP errors to preserve
+        // the default behavior. It does so by inspecting the status code
+        // instead of catching an exception which is what Saloon does.
+
+        $config->add(RequestOptions::HTTP_ERRORS, false);
+
+        // Now we'll add the headers - this is because Laravel doesn't
+        // deal with PSR requests. We'll add the headers from the PSR
+        // request to ensure the lowest-level values possible.
+
+        $config->add(RequestOptions::HEADERS, $psrRequest->getHeaders());
+
+        return $config->all();
+    }
+
+    /**
      * Create the Laravel Pending Request
      */
     protected function createLaravelPendingRequest(RequestInterface $psrRequest, bool $asynchronous): HttpPendingRequest
@@ -168,9 +177,7 @@ class HttpSender extends GuzzleSender
         // We'll set the body format as "body" and provide the PSR body stream.
         // This means we can keep the efficient memory stream.
 
-        $httpPendingRequest->bodyFormat('body')->withOptions([
-            'body' => $psrRequest->getBody(),
-        ]);
+        $httpPendingRequest->bodyFormat('body')->setPendingBody($psrRequest->getBody());
 
         return $httpPendingRequest;
     }

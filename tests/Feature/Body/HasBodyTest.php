@@ -20,12 +20,14 @@ test('the http sender properly sends it', function () {
 
     $request->headers()->add('Content-Type', 'application/custom');
 
-    $connector->sender()->addMiddleware(function (callable $handler) use ($request) {
-        return function (RequestInterface $guzzleRequest, array $options) use ($request) {
-            expect($guzzleRequest->getHeader('Content-Type'))->toEqual(['application/custom']);
-            expect((string)$guzzleRequest->getBody())->toEqual((string)$request->body());
+    $connector->sender()->addMiddleware(function (callable $handler) use ($connector, $request) {
+        return function (RequestInterface $psrRequest, array $options) use ($connector, $request) {
+            expect($psrRequest->getHeader('Content-Type'))->toEqual(['application/custom']);
+            expect((string)$psrRequest->getBody())->toEqual((string)$request->body());
 
-            return new FulfilledPromise(MockResponse::make()->getPsrResponse());
+            $factoryCollection = $connector->sender()->getFactoryCollection();
+
+            return new FulfilledPromise(MockResponse::make()->createPsrResponse($factoryCollection->responseFactory, $factoryCollection->streamFactory));
         };
     });
 

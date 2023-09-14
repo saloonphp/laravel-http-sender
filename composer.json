@@ -18,7 +18,7 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.5",
-        "pestphp/pest": "^1.21",
+        "pestphp/pest": "^v2.18",
         "phpstan/phpstan": "^1.9",
         "spatie/ray": "^1.33",
         "orchestra/testbench": "^7.7 || ^8.0"
@@ -43,7 +43,7 @@
             "./vendor/bin/phpstan analyse"
         ],
         "test": [
-            "./vendor/bin/pest"
+            "./vendor/bin/pest -p"
         ]
     }
 }

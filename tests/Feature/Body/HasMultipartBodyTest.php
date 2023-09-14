@@ -21,17 +21,19 @@ test('the http sender properly sends it', function () {
     $connector = new HttpSenderConnector;
     $request = new HasMultipartBodyRequest;
 
-    $connector->sender()->addMiddleware(function (callable $handler) use ($request) {
-        return function (RequestInterface $guzzleRequest, array $options) use ($request) {
-            expect($guzzleRequest->getHeader('Content-Type')[0])->toContain('multipart/form-data; boundary=');
-            expect((string)$guzzleRequest->getBody())->toContain(
+    $connector->sender()->addMiddleware(function (callable $handler) use ($connector, $request) {
+        return function (RequestInterface $psrRequest, array $options) use ($connector, $request) {
+            expect($psrRequest->getHeader('Content-Type')[0])->toContain('multipart/form-data; boundary=');
+            expect((string)$psrRequest->getBody())->toContain(
                 'X-Saloon: Yee-haw!',
                 'Content-Disposition: form-data; name="nickname"; filename="user.txt"',
                 'Content-Length: 3',
                 'Sam',
             );
 
-            return new FulfilledPromise(MockResponse::make()->getPsrResponse());
+            $factoryCollection = $connector->sender()->getFactoryCollection();
+
+            return new FulfilledPromise(MockResponse::make()->createPsrResponse($factoryCollection->responseFactory, $factoryCollection->streamFactory));
         };
     });
 

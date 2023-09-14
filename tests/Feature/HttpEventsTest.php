@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Saloon\Contracts\Response;
+use Saloon\Http\Response;
 use Saloon\HttpSender\HttpSender;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Config;

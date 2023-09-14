@@ -6,8 +6,8 @@ namespace Saloon\HttpSender\Tests\Fixtures\Requests;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
-use Saloon\Contracts\Body\HasBody as HasBodyContract;
 use Saloon\Traits\Body\HasStringBody;
+use Saloon\Contracts\Body\HasBody as HasBodyContract;
 
 class HasBodyRequest extends Request implements HasBodyContract
 {
