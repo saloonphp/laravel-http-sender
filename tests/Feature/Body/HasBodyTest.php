@@ -11,7 +11,7 @@ use Saloon\HttpSender\Tests\Fixtures\Connectors\HttpSenderConnector;
 test('the default body is loaded', function () {
     $request = new HasBodyRequest();
 
-    expect($request->body()->get())->toEqual('name: Sam');
+    expect($request->body()->all())->toEqual('name: Sam');
 });
 
 test('the http sender properly sends it', function () {

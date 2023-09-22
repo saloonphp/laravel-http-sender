@@ -12,7 +12,7 @@ use Saloon\HttpSender\Tests\Fixtures\Connectors\HttpSenderConnector;
 test('the default body is loaded', function () {
     $request = new HasXmlBodyRequest();
 
-    expect($request->body()->get())->toEqual('<p>Howdy</p>');
+    expect($request->body()->all())->toEqual('<p>Howdy</p>');
 });
 
 test('the content-type header is set in the pending request', function () {
