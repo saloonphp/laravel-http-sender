@@ -15,9 +15,9 @@ class HttpPendingRequest extends PendingRequest
     /**
      * Constructor
      */
-    public function __construct(Factory $factory = null)
+    public function __construct(Factory $factory = null, $middleware = [])
     {
-        parent::__construct($factory);
+        parent::__construct($factory, $middleware);
 
         $this->options = [];
     }

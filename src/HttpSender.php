@@ -165,7 +165,14 @@ class HttpSender extends GuzzleSender
      */
     protected function createLaravelPendingRequest(RequestInterface $psrRequest, bool $asynchronous): HttpPendingRequest
     {
-        $httpPendingRequest = new HttpPendingRequest(resolve(Factory::class));
+        /** @var Factory $httpFactory */
+        $httpFactory = resolve(Factory::class);
+
+        if (! $httpFactory->hasMacro('getGlobalMiddleware')) {
+            $httpFactory->macro('getGlobalMiddleware', fn () => $this->globalMiddleware ?? []);
+        }
+
+        $httpPendingRequest = new HttpPendingRequest($httpFactory, $httpFactory->getGlobalMiddleware());
         $httpPendingRequest->setClient($this->client);
 
         $this->laravelMiddleware->setRequest($httpPendingRequest);
