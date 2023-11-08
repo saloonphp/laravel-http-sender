@@ -51,3 +51,29 @@ test('you can pass additional guzzle config options and they are merged from the
 
     $connector->send($request);
 });
+
+test('you can pass additional headers that will be merged with the default headers from the psr request', function () {
+    $connector = new HttpSenderConnector();
+
+    $connector->config()->add('debug', true);
+
+    $connector->sender()->addMiddleware(function (callable $handler) use ($connector) {
+        return function (RequestInterface $guzzleRequest, array $options) use ($connector) {
+            expect($guzzleRequest->getHeaders())->toBe([
+                'Host' => ['tests.saloon.dev'],
+                'Accept' => ['application/json'],
+                'User-Agent' => ['Saloon'],
+            ]);
+
+            $factoryCollection = $connector->sender()->getFactoryCollection();
+
+            return new FulfilledPromise(MockResponse::make()->createPsrResponse($factoryCollection->responseFactory, $factoryCollection->streamFactory));
+        };
+    });
+
+    $request = new UserRequest;
+
+    $request->config()->add('headers', ['User-Agent' => 'Saloon']);
+
+    $connector->send($request);
+});
