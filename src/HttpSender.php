@@ -56,7 +56,7 @@ class HttpSender extends GuzzleSender
                 (string)$psrRequest->getUri(),
                 $this->createRequestOptions($pendingRequest, $psrRequest),
             );
-        } catch (ConnectionException|ConnectException $exception) {
+        } catch (ConnectionException | ConnectException $exception) {
             throw new FatalRequestException($exception, $pendingRequest);
         }
 
@@ -170,10 +170,6 @@ class HttpSender extends GuzzleSender
     {
         /** @var Factory $httpFactory */
         $httpFactory = resolve(Factory::class);
-
-        if (! $httpFactory->hasMacro('getGlobalMiddleware')) {
-            $httpFactory->macro('getGlobalMiddleware', fn () => $this->globalMiddleware ?? []);
-        }
 
         $httpPendingRequest = new HttpPendingRequest($httpFactory, $httpFactory->getGlobalMiddleware());
         $httpPendingRequest->setClient($this->client);
