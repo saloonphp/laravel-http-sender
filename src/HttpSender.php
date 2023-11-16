@@ -155,7 +155,10 @@ class HttpSender extends GuzzleSender
         // deal with PSR requests. We'll add the headers from the PSR
         // request to ensure the lowest-level values possible.
 
-        $config->add(RequestOptions::HEADERS, $psrRequest->getHeaders());
+        $config->add(RequestOptions::HEADERS, array_merge(
+            $psrRequest->getHeaders(),
+            $config->get(RequestOptions::HEADERS, [])
+        ));
 
         return $config->all();
     }
