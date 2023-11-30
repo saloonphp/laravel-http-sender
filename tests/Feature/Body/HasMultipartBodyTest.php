@@ -13,7 +13,7 @@ test('the default body is loaded', function () {
     $request = new HasMultipartBodyRequest();
 
     expect($request->body()->all())->toEqual([
-        'nickname' => new MultipartValue('nickname', 'Sam', 'user.txt', ['X-Saloon' => 'Yee-haw!']),
+        new MultipartValue('nickname', 'Sam', 'user.txt', ['X-Saloon' => 'Yee-haw!']),
     ]);
 });
 
