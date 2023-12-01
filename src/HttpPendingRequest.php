@@ -14,10 +14,12 @@ class HttpPendingRequest extends PendingRequest
 {
     /**
      * Constructor
+     *
+     * @param array<int, callable> $middleware
      */
-    public function __construct(Factory $factory = null)
+    public function __construct(Factory $factory = null, array $middleware = [])
     {
-        parent::__construct($factory);
+        parent::__construct($factory, $middleware);
 
         $this->options = [];
     }
