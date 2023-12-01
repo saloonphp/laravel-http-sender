@@ -11,6 +11,7 @@ use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\HttpSender\Tests\Fixtures\Requests\UserRequest;
 use Saloon\HttpSender\Tests\Fixtures\Connectors\HttpSenderConnector;
 use Saloon\HttpSender\Tests\Fixtures\Connectors\InvalidConnectionConnector;
+use Saloon\HttpSender\Tests\Fixtures\Requests\ErrorRequestThatShouldBeTreatedAsSuccessful;
 
 test('you can create a pool on a connector', function () {
     $connector = new HttpSenderConnector;
@@ -75,4 +76,27 @@ test('if a pool has a request that cannot connect it will be caught in the handl
     $promise->wait();
 
     expect($count)->toEqual(5);
+});
+
+test('if a pool has a failed response that should be treated as a successful response', function () {
+    $count = 0;
+
+    $pool = (new HttpSenderConnector)->pool([
+        new ErrorRequestThatShouldBeTreatedAsSuccessful,
+    ]);
+
+    $pool->withResponseHandler(function (Response $response) use (&$count) {
+        expect($response)->toBeInstanceOf(Response::class);
+        expect($response->status())->toBe(404);
+
+        $count++;
+    });
+
+    $promise = $pool->send();
+
+    expect($promise)->toBeInstanceOf(PromiseInterface::class);
+
+    $promise->wait();
+
+    expect($count)->toEqual(1);
 });
