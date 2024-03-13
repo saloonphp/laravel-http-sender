@@ -99,8 +99,8 @@ class HttpSender extends GuzzleSender
         // it back down the "otherwise"/"catch" chain
 
         return $promise
-            ->then(function (HttpResponse|TransferException $result) {
-                $exception = $result instanceof TransferException ? $result : $result->toException();
+            ->then(function (HttpResponse|TransferException|ConnectionException $result) {
+                $exception = $result instanceof TransferException || $result instanceof ConnectionException ? $result : $result->toException();
 
                 if ($exception instanceof Throwable) {
                     throw $exception;
@@ -114,7 +114,7 @@ class HttpSender extends GuzzleSender
                 },
             )
             ->otherwise(
-                function (HttpRequestException|TransferException $exception) use ($pendingRequest, $psrRequest) {
+                function (HttpRequestException|TransferException|ConnectionException $exception) use ($pendingRequest, $psrRequest) {
                     // When the exception wasn't a HttpRequestException, we'll throw a fatal
                     // exception as this is likely a ConnectException, but it will
                     // catch any new ones Guzzle release.

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Http\Client\ConnectionException;
 use Saloon\Http\Response;
 use Saloon\Http\PendingRequest;
 use Saloon\HttpSender\HttpSender;
@@ -64,7 +65,7 @@ test('if a pool has a request that cannot connect it will be caught in the handl
 
     $pool->withExceptionHandler(function (FatalRequestException $ex) use (&$count) {
         expect($ex)->toBeInstanceOf(FatalRequestException::class);
-        expect($ex->getPrevious())->toBeInstanceOf(ConnectException::class);
+        expect($ex->getPrevious())->toBeInstanceOf(ConnectionException::class);
         expect($ex->getPendingRequest())->toBeInstanceOf(PendingRequest::class);
 
         $count++;

@@ -1,4 +1,6 @@
-¬<?php
+<?php
+
+declare(strict_types=1);
 
 use Saloon\HttpSender\HttpSender;
 use Saloon\Exceptions\Request\FatalRequestException;
