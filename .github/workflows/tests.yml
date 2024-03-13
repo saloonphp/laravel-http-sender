@@ -3,11 +3,11 @@ name: tests
 on:
   push:
     branches:
-      - v1
-      - v2
+      - 'v1'
+      - 'v2'
   pull_request:
     branches:
-      - *
+      - '*'
 
 permissions:
   contents: read
